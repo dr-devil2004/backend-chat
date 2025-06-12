@@ -5,16 +5,33 @@ import cors from 'cors';
 
 const app = express();
 const server = http.createServer(app);
+
+// Get port from environment variable
+const PORT = process.env.PORT || 3000;
+
+// Get allowed origins from environment or use defaults
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
+  'http://127.0.0.1:5175',
+  'https://frontend-chat-psi.vercel.app',  // Add your Vercel domain
+  'https://frontend-chat-dr-devil2004.vercel.app',
+  'https://frontend-chat-git-main-dr-devil2004.vercel.app'
+];
+
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174', 'http://127.0.0.1:5175'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   },
 });
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174', 'http://127.0.0.1:5175'],
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
@@ -146,7 +163,6 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Server is ready to accept connections from frontend`);
