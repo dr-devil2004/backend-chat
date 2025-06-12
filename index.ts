@@ -19,7 +19,8 @@ const allowedOrigins = [
   'http://127.0.0.1:5175',
   'https://frontend-chat-psi.vercel.app',  // Add your Vercel domain
   'https://frontend-chat-dr-devil2004.vercel.app',
-  'https://frontend-chat-git-main-dr-devil2004.vercel.app'
+  'https://frontend-chat-git-main-dr-devil2004.vercel.app',
+  'https://frontend-chat-liart.vercel.app' // Added this domain
 ];
 
 const io = new Server(server, {
