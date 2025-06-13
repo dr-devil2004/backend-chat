@@ -2,7 +2,7 @@ services:
   - type: web
     name: backend-chat
     env: node
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -22,4 +22,16 @@ services:
         value: keep-alive
       - path: /*
         name: Keep-Alive
-        value: timeout=5 
+        value: timeout=5
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: https://frontend-chat-liart.vercel.app
+      - path: /*
+        name: Access-Control-Allow-Methods
+        value: GET, POST, OPTIONS
+      - path: /*
+        name: Access-Control-Allow-Headers
+        value: Content-Type, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Credentials
+      - path: /*
+        name: Access-Control-Allow-Credentials
+        value: true

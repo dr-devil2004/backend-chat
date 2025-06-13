@@ -38,7 +38,8 @@ const corsOptions = {
     }
   },
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Credentials'],
+  exposedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Credentials'],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204
@@ -51,12 +52,12 @@ app.use(cors(corsOptions));
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Credentials']
   },
   allowEIO3: true,
-  transports: ['polling', 'websocket'],
+  transports: ['websocket', 'polling'],
   pingTimeout: 60000,
   pingInterval: 25000,
   upgradeTimeout: 30000,
@@ -75,6 +76,10 @@ const io = new Server(server, {
 app.use((req, res, next) => {
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('Keep-Alive', 'timeout=5');
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Credentials');
   next();
 });
 
