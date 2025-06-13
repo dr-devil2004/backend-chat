@@ -57,11 +57,11 @@ const io = new Server(server, {
     allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Credentials']
   },
   allowEIO3: true,
-  transports: ['polling', 'websocket'],
+  transports: ['polling'],
   pingTimeout: 60000,
   pingInterval: 25000,
   upgradeTimeout: 30000,
-  allowUpgrades: true,
+  allowUpgrades: false,
   perMessageDeflate: false,
   httpCompression: {
     threshold: 2048
@@ -230,6 +230,25 @@ io.on('connection', (socket: Socket) => {
       console.log(`${user.username} left the chat`);
     }
   });
+});
+
+// Error handling middleware
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Error:', err);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err.message
+  });
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 // Handle server errors
