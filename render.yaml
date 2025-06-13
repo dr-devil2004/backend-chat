@@ -9,7 +9,7 @@ services:
         value: production
       - key: PORT
         value: 10000
-    healthCheckPath: /
+    healthCheckPath: /ws-health
     autoDeploy: true
     websocketSupport: true
     plan: free
@@ -35,3 +35,9 @@ services:
       - path: /*
         name: Access-Control-Allow-Credentials
         value: true
+      - path: /*
+        name: Upgrade
+        value: websocket
+      - path: /*
+        name: Connection
+        value: Upgrade

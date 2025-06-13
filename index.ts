@@ -57,7 +57,7 @@ const io = new Server(server, {
     allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Credentials']
   },
   allowEIO3: true,
-  transports: ['websocket', 'polling'],
+  transports: ['polling', 'websocket'],
   pingTimeout: 60000,
   pingInterval: 25000,
   upgradeTimeout: 30000,
@@ -69,7 +69,14 @@ const io = new Server(server, {
   path: '/socket.io/',
   serveClient: false,
   connectTimeout: 45000,
-  maxHttpBufferSize: 1e8
+  maxHttpBufferSize: 1e8,
+  cookie: {
+    name: 'io',
+    path: '/',
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
+  }
 });
 
 // Add keep-alive headers
@@ -92,6 +99,15 @@ app.get('/', (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('Keep-Alive', 'timeout=5');
   res.send('Chat server is running');
+});
+
+// Add a WebSocket health check endpoint
+app.get('/ws-health', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Keep-Alive', 'timeout=5');
+  res.json({ status: 'ok', ws: true });
 });
 
 // Store active users
