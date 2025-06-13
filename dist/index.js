@@ -64,7 +64,11 @@ const io = new socket_io_1.Server(server, {
     perMessageDeflate: false,
     httpCompression: {
         threshold: 2048
-    }
+    },
+    path: '/socket.io/',
+    serveClient: false,
+    connectTimeout: 45000,
+    maxHttpBufferSize: 1e8
 });
 app.use(express_1.default.json());
 // Add a simple health check endpoint

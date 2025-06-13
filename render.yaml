@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: backend-chat
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
+    autoDeploy: true
+    websocketSupport: true 

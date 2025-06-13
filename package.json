@@ -2,11 +2,12 @@
   "name": "chat-app-backend",
   "version": "1.0.0",
   "description": "Backend for chat application using Socket.io",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node dist/index.js",
     "dev": "nodemon index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "cors": "^2.8.5",

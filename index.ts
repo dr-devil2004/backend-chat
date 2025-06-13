@@ -64,7 +64,11 @@ const io = new Server(server, {
   perMessageDeflate: false,
   httpCompression: {
     threshold: 2048
-  }
+  },
+  path: '/socket.io/',
+  serveClient: false,
+  connectTimeout: 45000,
+  maxHttpBufferSize: 1e8
 });
 
 app.use(express.json());
