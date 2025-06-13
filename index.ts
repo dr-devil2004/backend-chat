@@ -56,7 +56,7 @@ const io = new Server(server, {
     allowedHeaders: ['Content-Type', 'Authorization']
   },
   allowEIO3: true,
-  transports: ['websocket', 'polling'],
+  transports: ['polling', 'websocket'],
   pingTimeout: 60000,
   pingInterval: 25000,
   upgradeTimeout: 30000,
@@ -71,12 +71,21 @@ const io = new Server(server, {
   maxHttpBufferSize: 1e8
 });
 
+// Add keep-alive headers
+app.use((req, res, next) => {
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Keep-Alive', 'timeout=5');
+  next();
+});
+
 app.use(express.json());
 
 // Add a simple health check endpoint
 app.get('/', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Keep-Alive', 'timeout=5');
   res.send('Chat server is running');
 });
 
@@ -202,6 +211,12 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
+// Handle server errors
+server.on('error', (error) => {
+  console.error('Server error:', error);
+});
+
+// Start the server
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Server is ready to accept connections from frontend`);
