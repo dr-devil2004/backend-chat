@@ -20,7 +20,8 @@ const allowedOrigins = [
   'https://frontend-chat-psi.vercel.app',
   'https://frontend-chat-dr-devil2004.vercel.app',
   'https://frontend-chat-git-main-dr-devil2004.vercel.app',
-  'https://frontend-chat-liart.vercel.app'
+  'https://frontend-chat-liart.vercel.app',
+  'https://frontend-chat-beta.vercel.app'
 ];
 
 // CORS configuration
@@ -55,7 +56,15 @@ const io = new Server(server, {
     allowedHeaders: ['Content-Type', 'Authorization']
   },
   allowEIO3: true,
-  transports: ['websocket', 'polling']
+  transports: ['websocket', 'polling'],
+  pingTimeout: 60000,
+  pingInterval: 25000,
+  upgradeTimeout: 30000,
+  allowUpgrades: true,
+  perMessageDeflate: false,
+  httpCompression: {
+    threshold: 2048
+  }
 });
 
 app.use(express.json());
